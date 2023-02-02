@@ -1,0 +1,31 @@
+package zohocrmapp.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import zohocrmapp.util.emailservice;
+
+@Controller
+public class EmailController {
+
+	@Autowired
+	private emailservice EmailService;
+	@RequestMapping(value="/composeEmail", method=RequestMethod.POST)
+	public String compoeemail(@RequestParam("email") String email,Model model) {
+		model.addAttribute("email",email);
+		return "compose_email";
+	} 
+	
+	@RequestMapping("/sendmail")
+	public String sendemail(@RequestParam("to") String to,@RequestParam("sub") String sub, @RequestParam("msg") String msg,Model model) {
+		
+		EmailService.sendemail(to, sub, msg);
+		model.addAttribute("msg", "Email Sent");
+		return "compose_email";
+		
+	}
+}
